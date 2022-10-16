@@ -1,0 +1,44 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravisService", "src\TravisService\TravisService.csproj", "{E941772E-D653-40D6-89E4-533999F5D67E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F776A2A2-9CC6-4DBE-B4B9-11D5CC2FFA24}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		build.cake = build.cake
+		build.ps1 = build.ps1
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cloudformation", "cloudformation", "{786A8A34-08C7-45A8-96FA-89529F266BFE}"
+	ProjectSection(SolutionItems) = preProject
+		cloudformation.yaml = cloudformation.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7D64BDD9-6F22-4539-9DD5-BC6E6F4E154F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F812EB31-B7AE-447D-8F4F-27A38A211288}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E941772E-D653-40D6-89E4-533999F5D67E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E941772E-D653-40D6-89E4-533999F5D67E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E941772E-D653-40D6-89E4-533999F5D67E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E941772E-D653-40D6-89E4-533999F5D67E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E941772E-D653-40D6-89E4-533999F5D67E} = {7D64BDD9-6F22-4539-9DD5-BC6E6F4E154F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B362FB0-6301-4E8E-819B-A4F1FD17C92D}
+	EndGlobalSection
+EndGlobal
