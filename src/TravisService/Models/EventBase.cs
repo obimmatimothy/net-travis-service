@@ -8,10 +8,17 @@ namespace TravisService.Models
 {
     public abstract class EventBase
     {
-        public double Longitude { get; internal set; }
+        protected EventBase(double longitude, double latitude, DateTime timestamp)
+        {
+            Longitude = longitude;
+            Latitude = latitude;
+            Timestamp = timestamp;
+        }
 
-        public double Latitude { get; internal set; }
+        public double Longitude { get; }
 
-        public DateTime Timestamp { get; internal set; }
+        public double Latitude { get; }
+
+        public DateTime Timestamp { get; }
     }
 }

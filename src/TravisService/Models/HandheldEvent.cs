@@ -8,6 +8,12 @@ namespace TravisService.Models
 {
     public sealed class HandheldEvent : EventBase
     {
-        public string HandheldId { get; internal set; }
+        public HandheldEvent(string handHeldId, double longitude, double latitude, DateTime timestamp):
+            base(longitude, latitude, timestamp)
+        {
+            HandheldId = handHeldId;
+        }
+
+        public string HandheldId { get;}
     }
 }

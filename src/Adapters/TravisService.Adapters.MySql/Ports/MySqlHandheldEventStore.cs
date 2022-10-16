@@ -28,7 +28,7 @@ namespace TravisService.Adapters.MySql.Ports
         public async Task StoreEventsAsync(IReadOnlyCollection<HandheldEvent> handheldEvents)
         {
             var query = @"
-insert into `handheldEvents` (HandheldId, Longitude, Latitude, Timestamp)
+insert into `HandheldEvents` (HandheldId, Longitude, Latitude, Timestamp)
 values (@handheldId, @longitude, @latitude, @timestamp)";
             var events = handheldEvents.Select(x => HandheldEventStorageModel.FromDomain(x)).ToList();
 
