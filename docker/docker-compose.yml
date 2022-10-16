@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  travisservice_db:
+    image: mysql:5.7
+    volumes:
+      - travisservice_db_volume:/var/lib/mysql
+    ports:
+      - 3396:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "travisservice"
+  travisservice_db_migrator:
+    image: boxfuse/flyway
+    volumes:
+      - ../database/travisservice/migrations:/flyway/migrations
+    depends_on:
+      - travisservice_db
+    command:
+      -user=master
+      -password=root
+      -locations=filesystem:./migrations
+      -url=jdbc:mysql://travisservice_db:3306/travisservice
+      -connectRetries=15
+      migrate
+volumes:
+  travisservice_db_volume:

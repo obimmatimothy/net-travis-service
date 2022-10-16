@@ -5,7 +5,12 @@ Parameters:
   AppGroup:
     Type: String
     Default: "travis-service"
-    AllowedPattern: "^[a-z0-9\\-]{1,22}$"
+  DatabaseEngine:
+    Type: "String"
+    Default: "aurora-mysql"
+  DatabaseName:
+    Type: "String"
+    Default: "travisservice"
   Environment:
     Type : "AWS::SSM::Parameter::Value<String>"
     Default: "/global/environment"
@@ -14,6 +19,85 @@ Parameters:
     Description: "Specify the region"
     Type: "String"
     Default: "eu-west-1"
-    AllowedValues:
-      - "eu-west-1"
-Resources: #none for now
+Resources:
+  AuroraMySQLCluster:
+    Type: "AWS::RDS::DBCluster"
+    Properties:
+      DBClusterIdentifier: !Sub "${AppGroup}-db-cluster"
+      BackupRetentionPeriod: 35
+      DatabaseName: !Ref "DatabaseName"
+      Engine: !Ref "DatabaseEngine"
+      EngineMode: "serverless"
+      ServerlessV2ScalingConfiguration:
+        MaxCapacity: 0.5
+        MinCapacity: 32
+      MasterUsername: "master"
+      MasterUserPassword: "root"
+      StorageEncrypted: true
+      EnableCloudwatchLogsExports:
+        - "error"
+      PerformanceInsightsEnabled: true
+      VpcSecurityGroupIds:
+        - !Ref "AuroraMySQLClusterSecurityGroup"
+      Tags:
+        - Key: "Name"
+          Value: !Sub "${Environment}-private-${AppGroup}-db-cluster"
+  AuroraMySQLClusterParameterGroup:
+    Type: "AWS::RDS::DBClusterParameterGroup"
+    Properties:
+      Description: !Sub "${AppGroup} Aurora Cluster Parameter Group"
+      Family: "aurora-mysql5.7"
+      Parameters:
+        time_zone: "UTC"
+      Tags:
+        - Key: "Name"
+          Value: !Sub "${Environment}-private-${AppGroup}-db-cluster-parameter-group"
+  AuroraMySQLClusterSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allows incoming/outgoing traffic to/from the internal resources"
+      VpcId: !ImportValue "infrastructure-vpc"
+      SecurityGroupIngress:
+        - Description: "Allow EC2 instances to access MySQL"
+          IpProtocol: "tcp"
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref "PrivateSecurityGroup"
+  AuroraMySQLInstance:
+    Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: "Delete"
+    Properties:
+      AllowMajorVersionUpgrade: false
+      AutoMinorVersionUpgrade: true
+      DBClusterIdentifier: !Ref "AuroraMySQLCluster"
+      DBInstanceIdentifier: !Sub "${Environment}-${AppGroup}-db-instance"
+      DBParameterGroupName: !Ref "AuroraMySQLParameterGroup"
+      Engine: !Ref "DatabaseEngine"
+  AuroraPrivateEgress:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    Properties:
+      GroupId: !Ref "PrivateSecurityGroup"
+      IpProtocol: "tcp"
+      FromPort: 3306
+      ToPort: 3306
+      DestinationSecurityGroupId: !Ref "AuroraMySQLClusterSecurityGroup"
+  AuroraPrivateIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref "PrivateSecurityGroup"
+      IpProtocol: "tcp"
+      FromPort: 3306
+      ToPort: 3306
+      SourceSecurityGroupId: !Ref "AuroraMySQLClusterSecurityGroup"
+  PrivateSecurityGroup:
+      Type: "AWS::EC2::SecurityGroup"
+      Properties:
+        GroupDescription: "Allows incoming/outgoing traffic to/from the internal resources"
+        SecurityGroupEgress:
+          - CidrIp: "0.0.0.0/0"
+            FromPort: 443
+            ToPort: 443
+            IpProtocol: "tcp"
+        Tags:
+          - Key: "Name"
+            Value: !Sub "${AWS::StackName}-private"
