@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+Description: AWS SAM stack that notifies when a delivery driver is distant from their vehicle
+Parameters:
+  AppGroup:
+    Type: String
+    Default: "travis-service"
+    AllowedPattern: "^[a-z0-9\\-]{1,22}$"
+  Environment:
+    Type : "AWS::SSM::Parameter::Value<String>"
+    Default: "/global/environment"
+    Description: "Environment in which resources are deployed."
+  Region:
+    Description: "Specify the region"
+    Type: "String"
+    Default: "eu-west-1"
+    AllowedValues:
+      - "eu-west-1"
+Resources: #none for now
