@@ -16,7 +16,7 @@ services:
     depends_on:
       - travisservice_db
     command:
-      -user=master
+      -user=root
       -password=root
       -locations=filesystem:./migrations
       -url=jdbc:mysql://travisservice_db:3306/travisservice
