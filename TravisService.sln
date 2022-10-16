@@ -34,7 +34,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravisService.Tests.Shared"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravisService.Adapters.MySql.Tests.Integration", "test\TravisService.Adapters.MySql.Tests.Integration\TravisService.Adapters.MySql.Tests.Integration.csproj", "{D5FC8506-6697-4763-8A86-08830814948C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravisService.Tests.Unit", "test\TravisService.Tests.Unit\TravisService.Tests.Unit.csproj", "{926C8780-A271-489D-9F6E-30E60545F0CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravisService.Tests.Unit", "test\TravisService.Tests.Unit\TravisService.Tests.Unit.csproj", "{926C8780-A271-489D-9F6E-30E60545F0CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{EFC42AF4-110C-44EE-B043-C5D1E997A710}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravisService.Functions.HandheldEventProcessor", "src\Functions\TravisService.Functions.HandheldEventProcessor\TravisService.Functions.HandheldEventProcessor.csproj", "{3E2A0408-6322-4241-A0D8-797546F9BF23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +70,10 @@ Global
 		{926C8780-A271-489D-9F6E-30E60545F0CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{926C8780-A271-489D-9F6E-30E60545F0CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{926C8780-A271-489D-9F6E-30E60545F0CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E2A0408-6322-4241-A0D8-797546F9BF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2A0408-6322-4241-A0D8-797546F9BF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2A0408-6322-4241-A0D8-797546F9BF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2A0408-6322-4241-A0D8-797546F9BF23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +86,8 @@ Global
 		{429D6894-510A-4125-978E-777AF7FEBEC9} = {F812EB31-B7AE-447D-8F4F-27A38A211288}
 		{D5FC8506-6697-4763-8A86-08830814948C} = {F812EB31-B7AE-447D-8F4F-27A38A211288}
 		{926C8780-A271-489D-9F6E-30E60545F0CB} = {F812EB31-B7AE-447D-8F4F-27A38A211288}
+		{EFC42AF4-110C-44EE-B043-C5D1E997A710} = {7D64BDD9-6F22-4539-9DD5-BC6E6F4E154F}
+		{3E2A0408-6322-4241-A0D8-797546F9BF23} = {EFC42AF4-110C-44EE-B043-C5D1E997A710}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6B362FB0-6301-4E8E-819B-A4F1FD17C92D}

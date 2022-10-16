@@ -19,6 +19,9 @@ Parameters:
     Description: "Specify the region"
     Type: "String"
     Default: "eu-west-1"
+Globals:
+  Function:
+    Runtime: dotnet6
 Resources:
   AuroraMySQLCluster:
     Type: "AWS::RDS::DBCluster"
@@ -89,6 +92,63 @@ Resources:
       FromPort: 3306
       ToPort: 3306
       SourceSecurityGroupId: !Ref "AuroraMySQLClusterSecurityGroup"
+  HandheldEventDeadLetterQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: !Sub "${AppGroup}-handheldEvent-dlq"
+      MessageRetentionPeriod: 1209600
+      Tags:
+        - Key: Name
+          Value: !Sub "${AppGroup}-handheldEvent-dlq"
+  HandheldEventProcessorFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Handler: "TravisService.Functions.HandheldEventProcessor::TravisService.Functions.HandheldEventProcessor.Function::Handler"
+      CodeUri: ./artifacts/TravisService.Functions.HandheldEventProcessor.zip
+      Description: I save all handheld devide events once they are made known to me
+      MemorySize: 256
+      Timeout: 300 #5minutes
+      FunctionName: !Sub "${AppGroup}-handheldEvent-processor"
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref "PrivateSecurityGroup"
+      Role: !Ref TravisServiceRole
+      Environment:
+        Variables:
+          Environment: !Ref Environment
+      Events:
+        RecievedMessageInQueue:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt "HandheldEventQueue.Arn"
+            BatchSize: 10
+  HandheldEventQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      FifoQueue: true
+      QueueName: !Sub "${AppGroup}-handheldEvent-queue.fifo"
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt "HandheldEventDeadLetterQueue.Arn"
+        maxReceiveCount: 3
+      VisibilityTimeout: 15
+      Tags:
+        - Key: Name
+          Value: !Sub "${AppGroup}-handheldEvent-queue.fifo"
+  HandheldEventQueuePolicy:
+    Type: "AWS::SQS::QueuePolicy"
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - sqs:SendMessage
+            Resource: !GetAtt "HandheldEventQueue.Arn"
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !GetAtt "SomeTopic.Arn" #This is the topic that pushes events from IOT to this queue
+      Queues:
+        - !Ref HandheldEventQueue
   PrivateSecurityGroup:
       Type: "AWS::EC2::SecurityGroup"
       Properties:
@@ -101,3 +161,41 @@ Resources:
         Tags:
           - Key: "Name"
             Value: !Sub "${AWS::StackName}-private"
+  QueueManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: "Allows Functions access to the required resources."
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "sqs:ChangeMessageVisibility"
+              - "sqs:ChangeMessageVisibilityBatch"
+              - "sqs:DeleteMessage"
+              - "sqs:DeleteMessageBatch"
+              - "sqs:GetQueueAttributes"
+              - "sqs:ReceiveMessage"
+              - "sqs:SendMessage"
+              - "sqs:SendMessageBatch"
+            Resource:
+              - !GetAtt "HandheldEventQueue.Arn"
+              - !GetAtt "HandheldEventDeadLetterQueue.Arn"
+  TravisServiceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Ref "AppGroup"
+      Tags:
+        - Key: "Name"
+          Value: !Sub "${AppGroup}-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - !Ref QueueManagedPolicy

@@ -25,10 +25,10 @@ var sourceDir = Directory("./src");
 var solutions = GetFiles("./**/*.sln");
 var projects = new []
 {
-    
+    new FilePath(sourceDir.Path + "/Functions/TravisService.Functions.HandheldEventProcessor/TravisService.Functions.HandheldEventProcessor.csproj"),
 };
 
-var functionNames = new[] { };
+var functionNames = new[] { "TravisServiceHandheldEventProcessor"," };
 
 // BUILD OUTPUT DIRECTORIES
 var artifactsDir = Directory("./artifacts");
