@@ -36,5 +36,29 @@ namespace SandyBridge.Infrastructure
 
             return result;
         }
+
+        /// <summary>
+        /// Run an expression and track its duration and success.
+        /// </summary>
+        /// <param name="func">Expression to execute</param>
+        /// <param name="action">Called with the duration and a flag indicating success</param>
+        [DebuggerStepThrough]
+        public static async Task TimedAsync(Func<Task> func, Action<bool, TimeSpan> action)
+        {
+            var success = false;
+
+            var stopwatch = Stopwatch.StartNew();
+
+            try
+            {
+                await func();
+                success = true;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                action(success, stopwatch.Elapsed);
+            }
+        }
     }
 }
