@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TravisService.Models;
 
-namespace TravisService.Calculators.Interfaces
+namespace TravisService.Calculators
 {
     internal interface IDistanceCalculator
     {
