@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Adapters\TravisService.Adapters.DynamoDB\TravisService.Adapters.DynamoDB.csproj" />
+    <ProjectReference Include="..\..\src\TravisService\TravisService.csproj" />
+    <ProjectReference Include="..\TravisService.Tests.Shared\TravisService.Tests.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
