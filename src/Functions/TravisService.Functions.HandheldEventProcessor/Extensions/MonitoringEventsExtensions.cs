@@ -1,4 +1,5 @@
-﻿using TravisService.Infrastructure;
+﻿using System;
+using TravisService.Infrastructure;
 
 namespace TravisService.Functions.HandheldEventProcessor.Extensions
 {

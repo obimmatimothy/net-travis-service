@@ -26,9 +26,10 @@ var solutions = GetFiles("./**/*.sln");
 var projects = new []
 {
     new FilePath(sourceDir.Path + "/Functions/TravisService.Functions.HandheldEventProcessor/TravisService.Functions.HandheldEventProcessor.csproj"),
+    new FilePath(sourceDir.Path + "/Functions/TravisService.Functions.VehicleEventProcessor/TravisService.Functions.VehicleEventProcessor.csproj"),
 };
 
-var functionNames = new[] { "TravisServiceHandheldEventProcessor"," };
+var functionNames = new[] { "TravisServiceHandheldEventProcessor", "TravisServiceVehicleEventProcessor", };
 
 // BUILD OUTPUT DIRECTORIES
 var artifactsDir = Directory("./artifacts");

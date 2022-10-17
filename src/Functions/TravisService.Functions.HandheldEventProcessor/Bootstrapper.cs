@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -6,6 +8,7 @@ using Serilog.Formatting.Json;
 using TravisService.Adapters.MySql;
 using TravisService.Adapters.MySql.Configurations;
 using TravisService.Infrastructure;
+using TravisService.UseCases;
 
 namespace TravisService.Functions.HandheldEventProcessor
 {
@@ -25,10 +28,13 @@ namespace TravisService.Functions.HandheldEventProcessor
             var mySqlSettings = configurationRoot.GetSection("MySql").Get<MySqlSettings>();
             services.AddMySqlAdapter(mySqlSettings, monitoringEvents);
 
-            services.AddDomainLogic(monitoringEvents);
+            services.AddDomainLogic();
 
             return services.BuildServiceProvider();
         }
+
+        private static void AddDomainLogic(this IServiceCollection serviceCollection) =>
+            serviceCollection.AddScoped<IProcessHandheldEventsUseCase, ProcessHandheldEventsUseCase>();
 
         private static IConfigurationRoot GetConfiguration()
         {

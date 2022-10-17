@@ -8,7 +8,7 @@ using TravisService.Ports;
 
 namespace TravisService.UseCases
 {
-    internal sealed class ProcessHandheldEventsUseCase : IProcessHandheldEventsUseCase
+    public sealed class ProcessHandheldEventsUseCase : IProcessHandheldEventsUseCase
     {
         private readonly IHandheldEventStore _handheldEventsStore;
         private readonly MonitoringEvents _monitoringEvents;

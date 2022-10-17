@@ -3,7 +3,7 @@ using TravisService.Models;
 
 namespace TravisService.Calculators
 {
-    internal interface IDistanceCalculator
+    public interface IDistanceCalculator
     {
         Task<double> CalculateDistance(LocationCoordinate initialLocation, LocationCoordinate latterLocation);
     }
