@@ -4,7 +4,7 @@ using TravisService.Models;
 
 namespace TravisService.Calculators
 {
-    internal sealed class DistanceCalculator : IDistanceCalculator
+    public sealed class DistanceCalculator : IDistanceCalculator
     {
         /// <remarks>
         /// Was expecting to use System.Device.Location to calculate these distances but that library only exists in .NET framework
