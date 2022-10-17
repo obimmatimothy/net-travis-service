@@ -8,7 +8,7 @@ namespace TravisService.Calculators
     {
         /// <remarks>
         /// Was expecting to use System.Device.Location to calculate these distances but that library only exists in .NET framework
-        /// Would be nie to have some library do this but for now, this is some random code from stackoverflow :(
+        /// Would be nice to have some library do this but for now, this is some random code from stackoverflow :(
         /// </remarks>
         public Task<double> CalculateDistance(LocationCoordinate initialLocation, LocationCoordinate latterLocation)
         {
