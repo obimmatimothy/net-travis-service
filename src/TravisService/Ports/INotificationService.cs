@@ -4,7 +4,7 @@ using TravisService.Models;
 
 namespace TravisService.Ports
 {
-    internal interface INotificationService
+    public interface INotificationService
     {
         /// <summary>
         /// Published a given alert event to a notification service
