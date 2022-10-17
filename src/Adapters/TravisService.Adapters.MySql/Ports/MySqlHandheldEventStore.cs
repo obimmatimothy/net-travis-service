@@ -25,7 +25,34 @@ namespace TravisService.Adapters.MySql.Ports
             _monitoringvents = monitoringEvents ?? throw new ArgumentNullException(nameof(monitoringEvents));
         }
 
-        public Task<IReadOnlyCollection<HandheldEvent>> GetEventsAsync(string handheldId, DateTime from, DateTime to) => throw new NotImplementedException();
+        public async Task<IReadOnlyCollection<HandheldEvent>> GetEventsAsync(string handheldId, DateTime from, DateTime to)
+        {
+            var query = @"
+select HandheldId, Longitude, Latitude, Timestamp
+from HandheldEvents
+where HandheldId = @handheldId
+and Timestamp >= @from
+and Timestamp <= @to";
+
+            var parameters = new
+            {
+                handheldId = handheldId,
+                from = from,
+                to = to,
+            };
+
+            try
+            {
+                return await Run.TimedAsync(
+                    () => GetEvents(query, parameters),
+                    (success, duration) => _monitoringvents.FetchHandheldEvents(success, duration));
+            }
+            catch (Exception exception)
+            {
+                _monitoringvents.FailedToGetHandheldEvents(exception);
+                throw new UnableToRetrieveHandheldEventsException(exception);
+            }
+        }
 
         public async Task StoreEventsAsync(IReadOnlyCollection<HandheldEvent> handheldEvents)
         {
@@ -51,6 +78,14 @@ values (@handheldId, @longitude, @latitude, @timestamp)";
         {
             using var connection = await _dbConnectionFactory.CreateDbConnection();
             return await connection.ExecuteAsync(query, events);
+        }
+
+        private async Task<IReadOnlyCollection<HandheldEvent>> GetEvents(string query, object parameters)
+        {
+            using var connection = await _dbConnectionFactory.CreateDbConnection();
+            var result = await connection.QueryAsync<HandheldEventStorageModel>(query, parameters);
+
+            return result.Select(r => r.ToDomain()).ToList();
         }
     }
 }
