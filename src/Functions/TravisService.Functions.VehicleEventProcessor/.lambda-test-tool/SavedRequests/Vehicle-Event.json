@@ -1,0 +1,20 @@
+{
+  "Records": [
+    {
+      "messageId": "29de0b57-b21e-4ac1-bd88-01bcb068cb78",
+      "receiptHandle": "MessageReceiptHandle",
+      "body": "{\"vehicleId\": \"HH:BB:BB:BB:01\", \"latitude\": 53.236545, \"longitude\": 5.693921, \"timestamp\": \"2022-10-10T16:45:39Z\"}",
+      "attributes": {
+        "ApproximateReceiveCount": "1",
+        "SentTimestamp": "1523232000000",
+        "SenderId": "123456789012",
+        "ApproximateFirstReceiveTimestamp": "1523232000001"
+      },
+      "messageAttributes": {},
+      "md5OfBody": "7b270e59b47ff90a553787216d55d91d",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:{partition}:sqs:{region}:123456789012:MyQueue",
+      "awsRegion": "{region}"
+    }
+  ]
+}
