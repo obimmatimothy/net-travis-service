@@ -25,6 +25,8 @@ namespace TravisService.Adapters.MySql.Ports
             _monitoringvents = monitoringEvents ?? throw new ArgumentNullException(nameof(monitoringEvents));
         }
 
+        public Task<IReadOnlyCollection<HandheldEvent>> GetEventsAsync(string handheldId, DateTime from, DateTime to) => throw new NotImplementedException();
+
         public async Task StoreEventsAsync(IReadOnlyCollection<HandheldEvent> handheldEvents)
         {
             var query = @"

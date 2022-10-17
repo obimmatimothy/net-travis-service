@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TravisService.Models
 {
     public sealed class HandheldEvent : EventBase
     {
-        public HandheldEvent(string handHeldId, double longitude, double latitude, DateTime timestamp):
+        public HandheldEvent(string handheldId, double longitude, double latitude, DateTime timestamp) :
             base(longitude, latitude, timestamp)
         {
-            HandheldId = handHeldId;
+            HandheldId = handheldId;
         }
 
-        public string HandheldId { get;}
+        public string HandheldId { get; }
     }
 }
