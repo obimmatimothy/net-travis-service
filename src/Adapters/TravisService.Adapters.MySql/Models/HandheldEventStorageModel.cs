@@ -21,5 +21,8 @@ namespace TravisService.Adapters.MySql.Models
                 Longitude = handheldEvent.Longitude,
                 Timestamp = handheldEvent.Timestamp,
             };
+
+        public HandheldEvent ToDomain() =>
+            new(HandheldId, Longitude, Latitude, Timestamp);
     }
 }

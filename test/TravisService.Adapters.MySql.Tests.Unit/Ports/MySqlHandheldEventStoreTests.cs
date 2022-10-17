@@ -37,7 +37,7 @@ namespace TravisService.Adapters.MySql.Tests.Unit.Ports
             assertion.Verify(typeof(MySqlHandheldEventStore).GetConstructors());
 
         [Theory, AutoData]
-        internal async Task GivenMySqlConnectionThrowsAnException_WhenExecuting_CustomExceptionIsThrown(
+        internal async Task GivenMySqlConnectionThrowsAnException_WhenStoringEvents_CustomExceptionIsThrown(
             IReadOnlyCollection<HandheldEvent> handheldEvents,
             Exception exception)
         {
@@ -46,6 +46,20 @@ namespace TravisService.Adapters.MySql.Tests.Unit.Ports
             Func<Task> action = () => _eventStore.StoreEventsAsync(handheldEvents);
 
             await action.Should().ThrowExactlyAsync<UnableToStoreHandheldEventsException>();
+        }
+
+        [Theory, AutoData]
+        internal async Task GivenMySqlConnectionThrowsAnException_WhenGettingEvents_CustomExceptionIsThrown(
+            string handheldId,
+            DateTime from,
+            DateTime to,
+            Exception exception)
+        {
+            _connectionFactoryMock.Setup(c => c.CreateDbConnection()).ThrowsAsync(exception);
+
+            Func<Task> action = () => _eventStore.GetEventsAsync(handheldId, from, to);
+
+            await action.Should().ThrowExactlyAsync<UnableToRetrieveHandheldEventsException>();
         }
     }
 }

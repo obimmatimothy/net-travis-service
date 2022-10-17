@@ -51,6 +51,52 @@ namespace TravisService.Adapters.MySql.Tests.Acceptance.Ports
             events.Count.Should().Be(handheldEvents.Count);
         }
 
+        [Theory, AutoData]
+        internal async Task GivenAHandheldIdWithAnEvent_WhenExecuting_EventIsRetrievedSuccessfully(HandheldEvent handheldEvent)
+        {
+            await GivenAFreshDatabase();
+
+            await _eventStore.StoreEventsAsync(new[] { handheldEvent });
+
+            var events = await _eventStore.GetEventsAsync(handheldEvent.HandheldId, handheldEvent.Timestamp.AddSeconds(-15), handheldEvent.Timestamp.AddSeconds(15));
+
+            events.Count.Should().Be(1);
+            events.First().HandheldId.Should().Be(handheldEvent.HandheldId);
+            events.First().Longitude.Should().Be(handheldEvent.Longitude);
+            events.First().Latitude.Should().Be(handheldEvent.Latitude);
+        }
+
+        [Theory, AutoData]
+        internal async Task GivenAHandheldIdWithNoEvents_WhenExecuting_EmptyCollectionIsReturned(HandheldEvent handheldEvent)
+        {
+            await GivenAFreshDatabase();
+
+            var events = await _eventStore.GetEventsAsync(handheldEvent.HandheldId, handheldEvent.Timestamp.AddSeconds(-15), handheldEvent.Timestamp.AddSeconds(15));
+
+            events.Should().BeEmpty();
+        }
+
+        [Theory, AutoData]
+        internal async Task GivenAHandheldIdWithMultipleEvents_WhenExecuting_ExpectedNumbrOfEventsAreRetrievedSuccessfully(HandheldEvent handheldEvent)
+        {
+            await GivenAFreshDatabase();
+
+            var handheldEvents = new List<HandheldEvent>()
+            {
+                new HandheldEvent(handheldEvent.HandheldId, handheldEvent.Longitude, handheldEvent.Latitude, handheldEvent.Timestamp),
+                new HandheldEvent(handheldEvent.HandheldId, handheldEvent.Longitude, handheldEvent.Latitude, handheldEvent.Timestamp.AddSeconds(2)),
+                new HandheldEvent(handheldEvent.HandheldId, handheldEvent.Longitude, handheldEvent.Latitude, handheldEvent.Timestamp.AddSeconds(5)),
+                // too late, should not be returned
+                new HandheldEvent(handheldEvent.HandheldId, handheldEvent.Longitude, handheldEvent.Latitude, handheldEvent.Timestamp.AddSeconds(25)),
+            };
+
+            await _eventStore.StoreEventsAsync(handheldEvents);
+
+            var events = await _eventStore.GetEventsAsync(handheldEvent.HandheldId, handheldEvent.Timestamp.AddSeconds(-15), handheldEvent.Timestamp.AddSeconds(15));
+
+            events.Count.Should().Be(3);
+        }
+
         private async Task GivenAFreshDatabase()
         {
             using var connection = await _connectionFactory.CreateDbConnection();
