@@ -16,5 +16,8 @@ namespace TravisService.Models
         public double Latitude { get; }
 
         public DateTime Timestamp { get; }
+
+        public LocationCoordinate GetLocationCoordinate() =>
+           new(Longitude, Latitude);
     }
 }
