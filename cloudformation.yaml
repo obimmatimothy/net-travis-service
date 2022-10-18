@@ -32,8 +32,8 @@ Resources:
       Engine: !Ref "DatabaseEngine"
       EngineMode: "serverless"
       ServerlessV2ScalingConfiguration:
-        MaxCapacity: 0.5
-        MinCapacity: 32
+        MaxCapacity: 8
+        MinCapacity: 0.5
       MasterUsername: "master"
       MasterUserPassword: "root"
       StorageEncrypted: true
