@@ -39,7 +39,7 @@ namespace TravisService.Tests.Unit.UseCases
             assertion.Verify(typeof(ProcessHandheldEventsUseCase).GetConstructors());
 
         [Fact]
-        internal async Task GivenANullArgument_WnehExecutingUseCase_ArgumentNullExceptionIsThrown()
+        internal async Task GivenANullArgument_WhenExecutingUseCase_ArgumentNullExceptionIsThrown()
         {
             Func<Task> action = () => _useCase.ExecuteAsync(null);
 

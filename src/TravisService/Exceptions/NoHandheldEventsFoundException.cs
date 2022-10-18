@@ -6,7 +6,7 @@ namespace TravisService.Exceptions
     [Serializable]
     public class NoHandheldEventsFoundException : Exception
     {
-        public NoHandheldEventsFoundException(Exception innerException) : base("No events found for handheld device", innerException)
+        public NoHandheldEventsFoundException() : base("None or limited events found for handheld device")
         {
         }
 
