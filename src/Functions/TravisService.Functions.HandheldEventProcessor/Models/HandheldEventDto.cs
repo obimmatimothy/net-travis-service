@@ -1,4 +1,5 @@
-﻿using TravisService.Models;
+﻿using System;
+using TravisService.Models;
 
 namespace TravisService.Functions.HandheldEventProcessor.Models
 {
